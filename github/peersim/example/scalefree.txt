@@ -1,0 +1,41 @@
+# PEERSIM EXAMPLE 1
+
+#random.seed 1234567890
+#simulation.cycles 30
+SIM_TIME 100
+
+#control.shf Shuffle
+
+
+simulation.experiments 1
+simulation.endtime SIM_TIME
+
+network.size 500000
+
+simulation.eventqueue PriorityHeap
+ 
+protocol.lnk IdleProtocol
+
+protocol.protocol example.aggregation.ScaleFreeProtocol
+
+protocol.propagate example.aggregation.ScaleFreePropagate
+protocol.propagate.linkable 	lnk
+protocol.propagate.nodeproid 	protocol
+ 
+init.rnd 	WireScaleFreeBA
+#init.rnd 	WireKOut
+init.rnd.protocol lnk
+init.rnd.k  2
+init.rnd.undir 1
+
+include.init rnd
+
+control.generator example.aggregation.ScaleFreeTrafficGenerator
+control.generator.protocol propagate
+control.generator.step SIM_TIME
+
+control.observer example.aggregation.ScaleFreeObserver
+control.observer.protocol protocol
+control.observer.link lnk
+control.observer.step 1
+

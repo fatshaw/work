@@ -1,0 +1,10 @@
+main:
+1.ParsedProperties(args):read file to the properties
+2.Configuration.setConfig(Porperty):get protocol and put them to the protocol container. the stucture of protocol container is: Map<String,Integer>. Each Protocol has a protcol id(pid) and pid will be concerned to the node.
+
+3.CDSimulator.nextExperiment() or EDSimulator.nextExperiment() according to the type of simulation.
+
+4.CDSimulator.nextExperiment():
+   1. Network.reset():remove all the nodes in the network, reconstruct network.size(defined in the configuration file) nodes and add them to the network.
+   2. when consturcting a node, we should assign the nodeid, protocols of the node and construct the defined protocol(begin with protocol) in the configuration.
+   3. 
