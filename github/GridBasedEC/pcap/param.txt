@@ -1,0 +1,22 @@
+./fcapture -r /tmp/pcap/bt2.pcap -l bt -f "(portrange 50000-65535 or port 10031) and not(net 192.0.0.0/8)"
+
+
+grep -v -e ".*:80[-(]" b > c//remove http
+grep -e "\[192\." b
+grep -e "->192\." b
+
+./fcapture -r /tmp/maze/maze2.pcap -f "port 30701" -l maze
+
+./fcapture -r /tmp/pcap/ed6.pcap -f "tcp portrange 50000-65535 or udp port 6652 or tcp port 6642 and not(net 192.0.0.0/8)" -l ed
+
+./fcapture -r /tmp/skype/skype2.pcap -f "(port 29742 or port 9725) and not(net 192.0.0.0/8)" -l skype
+
+./fcapture -r /tmp/pcap/ed8.pcap -f "tcp portrange 50000-65535 or udp port 6652 or tcp port 6642 and not(net 192.0.0.0/8)" -l
+
+./fcapture -r /tmp/pcap/http2.pcap -l http -f "port 80 and not(net 192.0.0.0/8)"
+
+./fcapture -I 10 -f "udp" -l peacomm -r ../../data/peacomm_new*.pcap 9999,12053
+
+pptv 8212
+
+bt,pptv,skype,ed,maze,http
