@@ -1,0 +1,7 @@
+package ProtoMessage;
+
+message PMSGCoro
+{
+	required uint32 iSequenceID = 1;
+	//required string callgraph = 2;
+}

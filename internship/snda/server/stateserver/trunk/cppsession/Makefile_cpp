@@ -1,0 +1,20 @@
+target	=	session_state
+CXX	=	g++
+CCOBJ = tokenMessage.pb.o
+CPPOBJ	=	session.o state_session.o
+OBJ=$(CCOBJ) $(CPPOBJ)
+LIB=-lprotobuf -lprotobuf-lite -lprotoc -lpthread -L/usr/local/lib
+INC=-I/usr/local/include -I/root/php/php-5.2.13
+#FLAG=-DEXECUTE
+FLAG=-DCOMPILE_DL_STATSERVER
+all:$(OBJ)
+	$(CXX)	-shared 		$(FLAG) 	-o 	$(target) 	$(OBJ) 	$(LIB)
+	
+$(CPPOBJ):	%.o	:	%.cpp
+	$(CXX) 	$(FLAG) 	$(INC) 	-c $< 	-o 	$@
+
+$(CCOBJ)	:	%.o	:	%.cc
+	$(CXX) 	$(FLAG) 	$(INC) 	-c $< 	-o 	$@
+	
+clean:
+	rm -f *.o $(target)

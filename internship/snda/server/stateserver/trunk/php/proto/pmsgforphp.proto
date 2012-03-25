@@ -1,0 +1,43 @@
+import "coremessage.proto";
+package ProtoMessage.PHPOPER;
+
+message DBVariant
+{
+    enum datatypes
+    {
+        BOOL = 1;
+        INT = 2;
+        STRING = 3;
+        DOUBLE = 4;
+        NIL = 5;
+    }
+    required datatypes type = 1;
+    optional bool bool_value = 2;
+    optional sint64 int_value = 3;
+    optional bytes string_value = 4;
+    optional double double_value = 5;
+}
+
+message DBRow
+{
+    repeated DBVariant units = 1;
+}
+
+message QueryResult2
+{
+    required PMSGCoro base = 1;
+    required sint32 retnum = 2;   //0: success  
+    optional bytes retmsg = 3;   //if retnum != 0, retmsg is optionally set.
+    optional uint64 insertid = 4;
+    optional uint64 affectedrows = 5;
+    repeated bytes fieldNames = 6;
+    repeated DBRow rows = 7;
+}
+
+message QueryRequest2
+{
+    required PMSGCoro base = 1;
+    required bytes sql = 2;
+    repeated DBVariant params = 3;
+    required int32 timeout = 4;
+}

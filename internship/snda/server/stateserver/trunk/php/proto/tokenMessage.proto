@@ -1,0 +1,12 @@
+message TokenMessage
+{
+	required uint32 seq = 1;
+	required string apiname = 2;
+	required uint32 cmd = 3;
+  message Paramlist
+  {
+       required string key = 1;
+       required bytes value = 2;
+  }
+  repeated Paramlist params = 4;
+}
