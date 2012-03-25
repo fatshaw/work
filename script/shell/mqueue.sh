@@ -1,1 +1,0 @@
-./MQueue mis.conf
