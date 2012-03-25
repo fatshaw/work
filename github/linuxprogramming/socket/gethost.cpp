@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <netdb.h>
+void err_exit(const char * err){
+	perror(err)	;
+	exit(-1);
+}
+
+void sock_err(const char * err,int fd = -1){
+	if(fd >=0)
+		close(fd);
+	err_exit(err);
+}
+
+#define LENGTH 1024
+char buf[LENGTH];
+char errmsg[LENGTH];
+
+int main()
+{
+	struct addrinfo * ailist,*aip;
+	struct addrinfo hint;
+	struct sockaddr_in * sinp;
+	const char * addr;
+	int err;
+	char abuf[INET_ADDRSTRLEN];
+	hint.ai_flags  =AI_CANONNAME;
+	hint.ai_family =0;
+	hint.ai_socktype = 0;
+	hint.ai_addrlen  = 0;
+	hint.ai_canonname = NULL;
+	hint.ai_addr = NULL;
+	hint.ai_next = NULL;
+	if((err = getaddrinfo("localhost",NULL,&hint,&ailist)) != 0){
+		sprintf(errmsg,"getaddrinfo error : %s\n",gai_strerror(err));
+		err_exit(errmsg);	
+	}
+	
+	for(aip = ailist;aip != NULL;aip = aip->ai_next){
+		sinp = (struct sockaddr_in * )aip->ai_addr;
+		addr = inet_ntop(AF_INET,&sinp->addr,abuf,INET_ADDRSTRLEN);
+		printf("address %s\n",addr?addr:"unknown");
+	}
+	return 0;
+}
+

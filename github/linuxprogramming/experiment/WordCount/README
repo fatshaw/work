@@ -1,0 +1,7 @@
+Mars
+Project
+Project
+$Id: README 720 2009-11-10 10:13:52Z wenbinor $
+1, Application Overview
+-----------------------
+String Match (SM):String match is used as exact matching for a string in an input file Each Map searches one line 

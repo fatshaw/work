@@ -1,0 +1,174 @@
+#
+# ourmon C frontend makefile
+#
+# dependencies:
+# ourmon uses libpcap, which on BSD is a wrapper around the Berkeley
+#	packet filter.
+#
+#
+# notes:
+#
+# for -DTHREAD,
+# because the libpcap includes are one file short,
+# download lippcap from www.tcpdump.org,
+# and put it say at
+# /home/mrourmon/src/libpcap, then
+# ./configure it, ./make and install  AND then
+# modify INCLS to add the libpcap directory explicitly
+# there is an example below that assumes /usr/src/libpcap is 
+# where you downloaded libpcap and built it.
+# Also make sure you actually USE the libpcap.a library
+# you built, else you may get core dumps due to bpf
+# incompatibilities.  
+# Note: there are 4 places you need to change to
+# make the -DTHREAD option go.  CFLAGS/LFLAGS/LIBS/INCLS
+# 
+ 
+OBJS = ourmon.o ipanalyze.o machdep.o util.o interfaces.o filter.o \
+	monconfig.o hashsort.o hashport.o signal.o hashsyn.o hashicmp.o \
+	hashscan.o ircscan.o trigger.o cprogram.o nonipanalyze.o \
+	patmatch.o spinlock.o sync.o ourpcap.o hashblist.o thread.o \
+	stringstore.o hashdns.o pktlinux.o
+
+BINDIR=/home/mrourmon/bin
+
+# profiling
+#CFLAGS=-pg 
+#LFLAGS=-pg
+
+# optimized, no threads
+CFLAGS=-O4 -DLINUX
+LFLAGS=-O4
+
+# threads, not optimized, but one could
+# try it and see if it works (add -O4)
+#CFLAGS=  -DLINUX -DTHREAD
+#LFLAGS= -DTHREAD
+
+# debug
+#CFLAGS=-g -DLINUX
+#LFLAGS=-g 
+
+# libs, no threads
+LIBS=-lpcre -lpcap
+
+# threads
+#LIBS=-lpcre /usr/local/lib/libpcap.a
+
+
+# this version maybe needed for threads (maybe not)
+# basically point into the libpcap development source
+#INCLS=. -I/usr/local/include -I/usr/src/libpcap
+# this version may help depending on where things live
+# doesn't hurt
+
+# no threads
+INCLS=. -I/usr/local/include 
+
+# threads
+#INCLS=. -I/usr/local/include -I/home/mrourmon/src/libpcap
+
+ourmon: ${OBJS}
+	cc ${LFLAGS} -o ourmon ${OBJS} ${LIBS}
+
+ourmon.o: ourmon.c ourmon.h thread.h
+	cc -I${INCLS} ${CFLAGS} -DDAEMON -c ourmon.c
+
+ipanalyze.o: ipanalyze.c ourmon.h filter.h
+	cc -I${INCLS} ${CFLAGS} -c ipanalyze.c
+
+nonipanalyze.o: nonipanalyze.c ourmon.h filter.h
+	cc -I${INCLS} ${CFLAGS} -c nonipanalyze.c
+
+machdep.o: machdep.c
+	cc -I${INCLS} ${CFLAGS} -c machdep.c
+
+util.o: util.c ourmon.h
+	cc -I${INCLS} ${CFLAGS} -c util.c
+
+interfaces.o: interfaces.c ourmon.h trigger.h
+	cc -I${INCLS} ${CFLAGS} -c interfaces.c
+
+monconfig.o: monconfig.c hashsort.h hashport.h filter.h trigger.h
+	cc -I${INCLS} ${CFLAGS} -c monconfig.c
+
+filter.o: filter.c ourmon.h filter.h
+	cc -I${INCLS} ${CFLAGS} -c filter.c
+
+stringstore.o: stringstore.c stringstore.h 
+	cc -I${INCLS} ${CFLAGS} -c stringstore.c
+
+hashdns.o: hashdns.c hashdns.h 
+	cc -I${INCLS} ${CFLAGS} -c hashdns.c
+
+hashsort.o: hashsort.c hashsort.h trigger.h
+	cc -I${INCLS} ${CFLAGS} -c hashsort.c
+
+hashport.o: hashport.c hashport.h
+	cc -I${INCLS} ${CFLAGS} -c hashport.c
+
+# -DSYNDUMP to dump all syn info to /tmp/syndump.txt
+# cc -DSYNDUMP ${CFLAGS} -c hashsyn.c
+hashsyn.o: hashsyn.c hashsyn.h trigger.h
+	cc -I${INCLS} ${CFLAGS} -c hashsyn.c
+
+hashicmp.o: hashicmp.c hashicmp.h
+	cc -I${INCLS} ${CFLAGS} -c hashicmp.c
+
+hashscan.o: hashscan.c hashscan.h 
+	cc -I${INCLS} ${CFLAGS} -c hashscan.c
+
+ircscan.o: ircscan.c ircscan.h
+	cc -I${INCLS} ${CFLAGS} -c ircscan.c
+
+hashblist.o: hashblist.c hashblist.h
+	cc -I${INCLS} ${CFLAGS} -c hashblist.c
+
+# define TRIG_DEBUG to get xtra syslog debug for trigger
+trigger.o: trigger.c trigger.h
+	cc -I${INCLS} ${CFLAGS} -c trigger.c
+
+cprogram.o: cprogram.c cprogram.h
+	cc -I${INCLS} ${CFLAGS} -c cprogram.c
+
+signal.o: signal.c
+	cc ${CFLAGS} -c signal.c
+
+patmatch.o: patmatch.c patmatch.h
+	cc -I${INCLS} ${CFLAGS} -c patmatch.c
+
+spinlock.o: spinlock.c spinlock.h
+	cc ${CFLAGS} -c spinlock.c
+	
+sync.o: sync.c sync.h
+	cc ${CFLAGS} -c sync.c
+
+ourpcap.o: ourpcap.c ourpcap.h
+	cc -I${INCLS} ${CFLAGS} -c ourpcap.c
+	
+thread.o: thread.c thread.h
+	cc ${CFLAGS} -c thread.c
+
+pktlinux.o: pktlinux.c 
+	cc ${CFLAGS} -c pktlinux.c
+
+# build standalone test modules, if any
+monconfig: monconfig.c hashsort.h hashport.h filter.h util.o
+	cc -I${INCLS} -DTESTMAIN ${CFLAGS} -o monconfig monconfig.c util.o hashsort.o hashport.o hashsyn.o \
+	hashicmp.o hashscan.o ircscan.o trigger.o patmatch.o cprogram.o ${LIBS}
+
+hs: hashsort.h hashsort.c
+	cc -g -DTESTMAIN -o hs hashsort.c
+
+hp: hashport.h hashport.c
+	cc -g -DTESTMAIN -o hp hashport.c
+
+
+# note: configure script puts this in local ourmon bin
+install: ourmon
+	cp ourmon ${BINDIR}
+	chmod +x ${BINDIR}
+
+clean:
+	rm -f *.o ourmon
+

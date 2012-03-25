@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="hatest" size="939,220" id="" metadata="uml2-1.0" initialized="true" tag="1000" key="32303037303533312D31303030206861746573742F726F6F74">
+  <children xsi:type="editmodel:ClassEditModel" name="Login" location="240,66" size="93,99" id="Control/Login" runTimeClassModel="Login(),user">
+    <children xsi:type="editmodel:CompartmentEditModel" size="70,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="user" id="Control/Login#user"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="59,18">
+      <children xsi:type="editmodel:MethodEditModel" name="Login" id="Control/Login#Login()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="User" location="75,66" size="133,125" id="Model/User" runTimeClassModel="username,path,password,key">
+    <children xsi:type="editmodel:CompartmentEditModel" size="110,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="key" id="Model/User#key"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="password" id="Model/User#password"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="path" id="Model/User#path"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="username" id="Model/User#username"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Config" location="360,66" size="133,143" id="DAO/Config" runTimeClassModel="port,username,dbName,hostname,password">
+    <children xsi:type="editmodel:CompartmentEditModel" size="110,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="dbName" id="DAO/Config#dbName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="hostname" id="DAO/Config#hostname"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="password" id="DAO/Config#password"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="port" id="DAO/Config#port"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="username" id="DAO/Config#username"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DAO" location="525,66" size="114,117" id="DAO/DAO" runTimeClassModel="getConnect(),query(Ljava.lang.String;),update(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="91,54">
+      <children xsi:type="editmodel:MethodEditModel" name="getConnect" id="DAO/DAO#getConnect()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="query" id="DAO/DAO#query(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="update" id="DAO/DAO#update(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=1;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

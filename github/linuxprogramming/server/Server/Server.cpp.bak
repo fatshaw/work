@@ -1,0 +1,167 @@
+#include "../header/header.h"
+#include "Server.h"
+
+unsigned int recordid = DATA_RECORD_ID;
+pthread_mutex_t Server::lock = PTHREAD_MUTEX_INITIALIZER;
+
+void * Server::setAlarm(void * argv){
+	Server * server = (Server*)argv;
+	struct timeval time;
+	while(server->isRunning){
+		server->sendPluse();
+		time.tv_sec = ALARM_SEC;
+		time.tv_usec = ALARM_USEC;	
+		select(0,NULL,NULL,NULL,&time);
+	}
+}
+
+void Server::sendPluse(){
+	pthread_mutex_lock(&Server::lock);
+	for(ClientList::iterator it = clientList.begin();it!=clientList.end();){
+		Client * pclient = *it;
+		if(pclient->getIsAlive()== false){
+			delete pclient;
+			pclient = NULL;
+			clientList.erase(it++);	
+		}
+		else{
+			pclient->setIsAlive(false);
+			++it;	
+		}
+	}
+	
+	for(ClientList::iterator it = clientList.begin();it!=clientList.end();++it){
+		Client * pclient = *it;
+		pclient->sendPluse();
+	}
+	
+	pthread_mutex_unlock(&Server::lock);
+}
+
+void Server::stop(){
+	this->isRunning = false;
+	Server::cleanResource(this);
+	close(this->server_sock);
+}
+
+void Server::showClientList(){
+	pthread_mutex_lock(&Server::lock);
+	for(ClientList::iterator it =clientList.begin();it!=clientList.end();++it){
+			Client * pclient = *it;
+			pclient->showAddress();
+	}
+	pthread_mutex_unlock(&Server::lock);
+}
+
+bool Server::initServer(){
+	struct sockaddr * addr = NULL;
+	int len  = 0;
+#ifdef AFUNIX
+	this->server_sock = socket(AF_UNIX,SOCK_STREAM,0);
+	unlink(unix_socket);
+	struct sockaddr_un unix_addr;
+	unix_addr.sun_family = AF_UNIX;
+	strcpy(unix_addr.sun_path , unix_socket);
+	len = offsetof(struct sockaddr_un,sun_path) + strlen(unix_socket);
+	addr = (struct sockaddr *)&unix_addr;
+#else
+	this->server_sock = socket(AF_INET,SOCK_STREAM,0);
+	struct sockaddr_in  tcp_addr;
+	tcp_addr.sin_family = AF_INET;
+	tcp_addr.sin_port = htons(10000);
+	tcp_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	len = sizeof(struct sockaddr);
+	addr=  (struct sockaddr * )&tcp_addr;
+#endif
+	if(this->server_sock== -1){
+		perror("socket error");
+		return false;
+	}
+	
+	if(bind(this->server_sock,addr,sizeof(struct sockaddr)) == -1){
+		perror("bind error");
+		return false;
+	}
+	
+	if(listen(this->server_sock,1024) == -1){
+		perror("listen error");
+		return false;
+	}
+	
+	pthread_t threadid;
+	int ret = pthread_create(&threadid,NULL,Server::recvAcceptThread,(void*)this);
+	if(ret !=0){
+		perror("create pthread error");
+		return false;
+	}
+	this->isRunning = true;
+	ret = pthread_create(&threadid,NULL,Server::cleanResource,(void*)this);
+	if(ret !=0){
+		perror("create pthread error");
+		return false;
+	}
+	
+	ret = pthread_create(&threadid,NULL,Server::setAlarm,(void*)this);
+	if(ret !=0){
+		perror("create pthread error");
+		return false;
+	}
+	
+	return true;
+}
+
+void * Server::cleanResource(void * argv){
+	Server * server = (Server*)argv;
+	while(server->isRunning){
+		pthread_mutex_lock(&Server::lock);
+		for(ClientList::iterator it = server->clientList.begin();it!=server->clientList.end();){
+			Client * pclient = *it;
+			if(pclient->getIsOver() == true){
+				printf("delete client\n");
+				delete pclient;
+				pclient = NULL;
+				server->clientList.erase(it++);
+			}
+			else{
+				++it;
+			}
+		}
+		pthread_mutex_unlock(&Server::lock);
+		sleep(5);
+	}
+	if(server->isRunning == false){
+		pthread_mutex_lock(&Server::lock);
+		for(ClientList::iterator it = server->clientList.begin();it!=server->clientList.end();){
+			Client * pclient = *it;
+			delete pclient;
+			pclient = NULL;
+			server->clientList.erase(it++);
+		}
+		pthread_mutex_unlock(&Server::lock);
+		printf("end of cleaning resource \n");
+	}
+}
+
+void * Server::recvAcceptThread(void*argv){
+	Server * server = static_cast<Server*>(argv);
+	int client_sock = 0;
+	struct sockaddr_in client_addr;
+	int sinSize = sizeof(struct sockaddr);
+	while(server->isRunning){
+			client_sock = accept(server->server_sock,(struct sockaddr *)&client_addr,(socklen_t * )&sinSize);
+			if(client_sock == -1){
+				server->isRunning = false;
+				break;
+			}
+			try{
+				Client * client = new Client(client_sock,client_addr);
+				pthread_mutex_lock(&Server::lock);
+				server->clientList.push_back(client);
+				pthread_mutex_unlock(&Server::lock);
+				client->startRunning();
+			}
+			catch(std::exception & ex){
+				cerr<<"exception is "<<ex.what()<<endl;	
+			}
+	}
+}
