@@ -1,0 +1,83 @@
+Overview
+--------
+
+fcapture currently consists of two programs: fcapture(1), which reads packet
+data from a pcap(3) source, notes flow information (including IP addresses,
+port numbers, packet/byte counts, and TCP flags) and writes dump files in a
+special "fcap" format; and fcapdump(1), which reads fcap files and dumps them
+in human readable format to stdout.  fcapdump is flexible in that it can read
+gzipped dump files as well as tar/gzip archives of multiple dump files.
+
+Limitations
+-----------
+
+fcapture(1) is currently limited to the IPv4 network protocol and TCP/UDP
+transport protocols.  flow start time and duration are precise only to seconds
+resolution.
+
+fcapdump(1) lacks a flexible bpf-like syntax for filtering fcap files.  it can
+only filter by individual /32 IP address.
+
+Building
+--------
+
+fcapture has been tested on Linux, FreeBSD, and OpenBSD.
+
+Build dependencies on Linux are:
+
+    libjudy-dev libpcap0.8-dev
+
+FreeBSD:
+
+    gmake Judy
+
+OpenBSD:
+
+    gmake libJudy
+
+Running
+-------
+
+If running on Linux, I recommend using the high performance PACKET_MMAP
+variant of libpcap, available from
+
+    http://public.lanl.gov/cpw/
+or
+    http://people.debian.org/~edmonds/libpcap-mmap/
+        (Debian packages)
+
+A Debian init script is included.  The /etc/default/fcapture file controls
+whether to start fcapture daemons from the init script ("ENABLED") and which
+fcapture instances ("INSTANCES") to start.  Instances are the names of config
+files in the /etc/fcapture directory and specify the capture interface,
+capture packet length, log path, and BPF filter.  An example instance config
+could be:
+
+
+INTERFACE=eth0
+LOGPREFIX=/var/log/fcap/`hostname`.$INTERFACE
+FILTER="ip proto \\tcp or ip proto \\udp"
+PCAP_SNAPLEN=96
+
+
+While fcapture(1) can be run from the init script or daemonized with the -d
+and/or -P options, I instead recommend a supervision utility like runit or
+daemontools as fcapture(1) produces useful statistics on stderr if not
+daemonized.  If using the MMAP libpcap on Linux, a supervision run script might
+look like this:
+
+
+#!/bin/sh
+exec 2>&1
+
+export INTERFACE=eth1
+export BPF="ip proto \\tcp or ip proto \\udp"
+export LOGPREFIX=/var/log/fcap/mynetwork
+
+export PCAP_MEMORY=262144
+export PCAP_VERBOSE=1
+export PCAP_STATS=0x406
+export PCAP_PERIOD=60000
+export PCAP_SNAPLEN=96
+
+exec fcapture -i $INTERFACE -f "$BPF" -l $LOGPREFIX

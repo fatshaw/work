@@ -1,0 +1,4 @@
+INTERFACE=eth0
+LOGPREFIX=/var/log/fcap/`hostname`.$INTERFACE
+FILTER="ip proto \\tcp or ip proto \\udp"
+PCAP_SNAPLEN=96

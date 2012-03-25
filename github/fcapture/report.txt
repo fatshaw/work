@@ -1,0 +1,6 @@
+fcapture.c:change unit of time duration of a netflow from second to millsecond
+
+fcapdump.c:add netflow output.the format is : timeduration,protocol type,source packets count,destinary packets count,source bytes count,destinary bytes count,category(bt or http for now)
+
+next we can add average statistic information to the netflow output such as average packets count duration the whole netflow time.
+

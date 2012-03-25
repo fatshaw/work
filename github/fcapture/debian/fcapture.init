@@ -1,0 +1,76 @@
+#!/bin/sh
+
+DAEMON=/usr/bin/fcapture
+NAME=fcapture
+
+ENABLED=0
+
+test -x $DAEMON || exit 0
+
+test -f /etc/default/fcapture && . /etc/default/fcapture
+             
+test "$ENABLED" != "0" || exit 0
+test ! -z "$INSTANCES" || exit 0
+
+for INSTANCE in $INSTANCES; do
+
+    unset INTERFACE FILTER LOGPREFIX PCAP_SNAPLEN OPTIONS
+    test -f /etc/fcapture/$INSTANCE && . /etc/fcapture/$INSTANCE
+
+    if [ -z "$INTERFACE" ]; then
+        echo "Missing interface name for fcapture instance $INSTANCE."
+        continue
+    fi
+
+    if [ -z "$LOGPREFIX" ]; then
+        LOGPREFIX=/var/log/fcap/`hostname`.$INSTANCE
+    fi
+
+    OPTIONS="-i $INTERFACE -l $LOGPREFIX"
+
+    if [ -n "$FILTER" ]; then
+        OPTIONS+=" -f $FILTER"
+    fi
+
+    if [ -n "$PCAP_SNAPLEN" ]; then
+        OPTIONS+=" -s $PCAP_SNAPLEN"
+    fi
+
+    PIDFILE="/var/run/fcapture/$INSTANCE.pid"
+    OPTIONS+=" -P $PIDFILE"
+
+    case "$1" in
+        start)
+            echo -n "Starting $NAME: "
+            start-stop-daemon --start --pidfile $PIDFILE \
+                --name $NAME --oknodo --startas $DAEMON \
+                -- $OPTIONS
+            echo "$INTERFACE."
+            ;;
+
+        stop)
+            echo -n "Stopping $NAME: "
+            start-stop-daemon --stop --pidfile $PIDFILE --name $NAME --oknodo
+            echo "$INTERFACE."
+            ;;
+
+        restart|force-reload)
+            echo -n "Restarting $NAME: "
+            start-stop-daemon --stop --pidfile $PIDFILE --name $NAME \
+                --retry 30 --oknodo
+            start-stop-daemon --start --pidfile $PIDFILE \
+                --name $NAME --oknodo --startas $DAEMON \
+                -- $OPTIONS
+            echo "$INTERFACE."
+            ;;
+
+        *)
+            N=/etc/init.d/$NAME
+            echo "Usage: $N {start|stop|restart|force-reload}" >&2
+            exit 1
+            ;;
+    esac
+
+done
+
+exit 0

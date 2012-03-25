@@ -1,0 +1,18 @@
+Source: fcapture
+Section: net
+Priority: extra
+Maintainer: Robert S. Edmonds <edmonds@debian.org>
+Build-Depends: debhelper (>= 5), libpcap0.8-dev, libjudy-dev
+Standards-Version: 3.7.2
+
+Package: fcapture
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: network flow capture utility
+ fcapture is a utility to capture and dump IPv4 TCP/UDP flow information
+ from a network interface or pcap save file.  The accompanying fcapdump
+ utility converts these flow capture dump files into human readable output.
+ .
+ fcapture can monitor high speed links and is more frugal in terms of disk
+ space and CPU usage than similar programs like argus which use more
+ detailed flow log formats.

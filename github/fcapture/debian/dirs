@@ -1,0 +1,4 @@
+etc/fcapture
+usr/bin
+var/log/fcap
+var/run/fcapture
