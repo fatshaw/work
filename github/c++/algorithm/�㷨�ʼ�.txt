@@ -1,0 +1,254 @@
+c++多重继承中，如果两个父类都申明了相同签名的函数，并且如果在子类中没有显示的定义该函数，并且如果代码中调用了这个函数，则编译器会报错，如果没有调用则不会出错。
+同样，如果一个父类Base1对函数使用了virtual，而另一个父类Base2对函数没用virutal，则如果使用Base1去调用则会有动态绑定，而如果使用Base2去调用则不会使用动态绑定。
+
+
+求第k个数字的时候一定记住不用把所有求排序，只要求第k个数字即可。
+动态规划：dynamic programming
+递归方程：recursive equation
+
+
+一个系统有X个cpu，现在有任务进来，你只知道任务像申请最多M个cpu资源，它的运行时间不知道，你可以给他小于M个cpu，但是时间相应会比原来长一点，请你设计个算法
+使用贪心，当cpu多的时候分配最多m个，然后逐渐减少，当cpu没有时，还有新的任务进来则将运行时间最长的那个任务，停止一定时间后恢复，或者当有任务运行时间大于某一个被停止的任务时，切换任务。
+
+
+对于一个文本，里面的数字都是0-9，要用一个压缩算法进行压缩。
+使用哈弗曼算法进行压缩。首先统计0-9每个字符的出现次数，然后使用哈弗曼编码对每个字符进行编码最后编码对0-9进行替换达到压缩的目的。
+
+树的深度是指节点的层数，并不是节点的子树的高度。
+
+trie:用于记录前缀树，常用于表示字典集合。
+
+动态规划：0-1背包问题
+
+对称数组：找到中心点后向两边扩展
+
+逆序对：使用归并排序，排序过程中记录交换位置的个数
+
+数组长度为n，保存范围是0-n-1的数，可以将0-n-1对好入座放入数组中，看重复下标。可以求和，看和正常的差值。
+
+
+第k小的数用快排方法分割后递归（中位数一样）
+
+主元素问题就是中位数问题
+如果元素个数太大不能全部存入内存，只能使用堆排序。
+如果是topK问题，建立K个元素的最小堆，则堆顶是最小元素，如果新的元素比堆顶小则直接丢弃，如果大于堆顶，则替换堆顶并自顶向下调整shiftdown。
+topK问题解法：
+典型的topK问题。首先建立一个100个LogUnit大小的小顶堆（确保userID值不同），初始化堆之后，依次读取后面的记录，如果该记录的 userNetStatus值比堆顶元素值小或等于，读取下一记录；如果大于堆顶元素值，分两种情况，如果该记录的userID不在堆中，则将其替换堆顶元素，shifdown堆，如果在堆中（需要查找）又分两种情况，如果该值大于堆中的值则替换并执行shiftup调整堆，否则不操作。
+关于对userID的快速查找，可以建立一个二叉排序树进行操作。也可以顺序查找，就是效率低了点。
+
+关于这类题目还可以使用桶排序。比如需要找topK，建立K个桶，假设元素是int型，则第一个桶存放minint~minint+2^32/K,第二个桶存放MININT+2^32/K~MININT+2^32*2/K，以此类推并统计每个桶的元素个数。然后找个topK所在的桶，假如比该桶大的桶的元素个数为n，并对该桶使用计数排序找到该桶中第k-n个元素就是topK。
+
+
+归并排序一定要记住处理每个部分剩余元素。
+
+二叉搜索树的中序遍历是有序访问树的元素，可以使用中序遍历判断一个二叉树是不是有序二叉树同时可以作用排序的一种方法。
+
+
+
+树的节点结构
+struct TreeNode
+{
+   TreeNode *left;
+   TreeNode *right;
+   TreeNode *next;//初始时二叉树各节点next为空，层次遍历后用它将各节点串起来。
+};
+要求时间复杂度O(n),空间复杂度O(1).
+
+O(1)复杂度层次遍历二叉树
+p = q = root;
+
+while (p) {
+  if (p -> left) {
+       q -> next = p -> left;
+       q = q -> next;
+  }
+  if (p -> right) {
+       q -> next = p -> right;
+       q = q -> next;
+  }
+  p = p -> next;
+}
+
+在做算法题时，可以先从最简单的方法做起，不考虑算法复杂度
+可以先用简单的实例进行分析，如取一个元素开始考虑，再取两个元素，三个元素进行分析，在考虑普遍情况。
+
+如果题目中有参数N，可以将N从1开始分析，看看是否有什么规律可以使用
+
+最长递增字串
+同样使用动态规划：dp[i]表示包含第i个元素的字串中最长递增字串的长度。则dp[i]=max{dp[j]+1,dp[i]} 0<=j<i if a[i]>a[j] 复杂度O(n)
+
+将数组中奇数全部放到偶数前面，利用快排的分割函数。
+
+用两个栈实现一个队列：push直接放在第一个栈里，pop时如果第二个栈不空，则第二个栈pop，如果第二个栈为空，将第一个栈的所有元素都pop到第二个栈，第二个栈再pop
+
+用两个队列实现一个栈：push直接放第一个栈，pop时如果第一个队列不空，则将第一个队列所有元素都是pop到第二个队列，pop的最后个元素为pop返回值。如果第一个队列为空，则将第二个队列都pop到第一个队列中，最后个元素为pop放回值，复杂度为O(n^2).
+
+
+分解因式：
+5、分解成质因数(如435234=251*17*17*3*2，据说是华为笔试题)
+void prim(int m, int n) {
+    if(m>n) {
+       while(m%n != 0) n++;
+       m /= n;
+       prim(m, n);
+       printf("%d*", n);
+    }
+}
+int main(int argc, char* argv[]) {
+    int n = 435234;
+    printf("%d=", n);
+    prim(n, 2);
+}
+
+8皇后变形：
+8、求网格中的黑点分布。现有6*7的网格，在某些格子中有黑点，已知各行与各列中有黑点的点数之和，请在这张网格中画出黑点的位置。（这是一网友提出的题目，说是他笔试时遇到算法题）
+#define ROWS 6
+#define COLS 7
+int iPointsR[ROWS] = {2, 0, 4, 3, 4, 0}; // 各行黑点数和的情况
+int iPointsC[COLS] = { 4, 1, 2, 2, 1, 2, 1 }; // 各列黑点数和的情况
+int iCount, iFound;
+int iSumR[ROWS], iSumC[COLS], Grid[ROWS][COLS];
+ 
+int Set(int iRowNo) {
+    if (iRowNo == ROWS) {
+       for (int iColNo = 0; iColNo < COLS && iSumC[iColNo] == iPointsC[iColNo]; iColNo++)
+           if (iColNo == COLS - 1) {
+              printf("\nNo.%d:\n", ++iCount);
+              for (int i = 0; i < ROWS; i++)
+                  for (int j = 0; j < COLS; j++)
+                     printf("%d%c", Grid[j], (j + 1) % COLS ? ' ' : '\n');
+              iFound = 1; // iFound = 1，有解
+           }
+    } else {
+       for (int iColNo = 0; iColNo < COLS; iColNo++) {
+           if (iPointsR[iRowNo] == 0) {
+              Set(iRowNo + 1);
+           } else if (Grid[iRowNo][iColNo] == 0) {
+              Grid[iRowNo][iColNo] = 1;
+              iSumR[iRowNo]++;
+              iSumC[iColNo]++;
+              if (iSumR[iRowNo] < iPointsR[iRowNo] && iSumC[iColNo]
+                     <= iPointsC[iColNo])
+                  Set(iRowNo);
+              else if (iSumR[iRowNo] == iPointsR[iRowNo] && iRowNo < ROWS)
+                  Set(iRowNo + 1);
+              Grid[iRowNo][iColNo] = 0;
+              iSumR[iRowNo]--;
+              iSumC[iColNo]--;
+           }
+       }
+    }
+    return iFound; // 用于判断是否有解
+}
+int main(int argc, char* argv[]) {
+    if (!Set(0))
+       printf("Failure!");
+}
+
+大数字相乘:大整数相乘需考虑几点：
+1. 相乘的结果的长度为两个数的长度和
+2. 每一位的值应该由几部分组成：
+a. 之前运算的结果
+b. 当前两位相乘的结果
+c. 上一位的进位
+
+10、大整数数相乘的问题。（这是2002年在一考研班上遇到的算法题）
+void Multiple(char A[], char B[], char C[]) {
+    int TMP, In=0, LenA=-1, LenB=-1;
+    while(A[++LenA] != '\0');
+    while(B[++LenB] != '\0');
+    int Index, Start = LenA + LenB - 1;
+    for(int i=LenB-1; i>=0; i--) {
+       Index = Start--;
+        if(B != '0') {
+           for(int In=0, j=LenA-1; j>=0; j--) {
+              TMP = (C[Index]-'0') + (A[j]-'0') * (B - '0') + In;
+              C[Index--] = TMP % 10 + '0';
+              In = TMP / 10;
+           }
+           C[Index] = In + '0';
+       }
+    }
+}
+
+
+
+12、四个工人，四个任务，每个人做不同的任务需要的时间不同，求任务分配的最优方案。
+#include <iostream>
+#include <values.h>
+using namespace std;
+
+#define WORKER 4
+#define JOB 4
+int cost[WORKER][JOB]={{1,2,3,4},{2,3,4,2},{3,2,1,1},{1,2,3,1}
+};
+
+int tasks[JOB];
+int workers[WORKER];
+
+int minCost = MAXINT;
+
+void assign(int task,int value)
+{
+    if(task == JOB)
+    {
+        if(value<minCost)minCost = value;
+    }
+    else
+    {
+        for(int i = 0;i<WORKER;++i)
+        {
+            if(workers[i]==0 && value < minCost)
+            {
+                workers[i]=1;
+                tasks[task] = i;
+                value+=cost[i][task];
+                assign(task+1,value);
+                tasks[task] = 0;
+                value-=cost[i][task];
+            }
+        }
+    }
+}
+
+int main()
+{
+    assign(0,0);
+    cout<<minCost<<endl;
+}
+
+
+16、2005年11月金山笔试题。编码完成下面的处理函数。函数将字符串中的字符'*'移到串的前部分，前面的非'*'字符后移，但不能改变非'*'字符的先后顺序，函数返回串中字符'*'的数量。如原始串为：ab**cd**e*12，处理后为*****abcde12，函数并返回值为5。（要求使用尽量少的时间和辅助空间）
+1. 常规思路,插入排序方法，看到一个*将它向前面插入。O（n^2）
+2. 空间换时间方法：用一个数组保存所有非*字符，在放回原数组。O(n) time, O(n) space
+3. 高效方法，不用将*往前面插入，可以将非*字符往后移动，即从后往前遍历（通常我们会用从前往后遍历的方法）
+//i指向*字符
+//j指向非*字符
+//交换i,j
+int change(char *str) {
+    int i, j = strlen(str) - 1;
+    for (i = j; j >= 0; j--) {
+        if (str[i] != '*') {
+            i--;
+        } else if (str[j] != '*') {
+            str[i] = str[j];
+            str[j] = '*';
+            i--;
+        }
+    }
+    return i+1;//i-j，j=-1 => i+1
+}
+
+17.不用临时空间交换数据
+void change(char *str) {
+    for(int i=0,j=strlen(str)-1; i<j; i++, j--) {
+       *str ^= str[j] ^= *str ^= str[j];
+    }
+}
+
+二叉树最近公共父节点：
+1. 排序二叉树。遍历找到一个节点的值处于两个节点的中间即可
+2. 节点有指向父亲的节点。从二个节点遍历到根节点。从根节点开始找两条路径的最远公共节点。
+
+
+在做排序等比较算法时一定要注意等号的位置，即两个数比较时应不应该加等号要注意考虑。

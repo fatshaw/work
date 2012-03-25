@@ -1,0 +1,2 @@
+a.c,b.c: two data structure with different member but total size is same. so it can access to the same memory with differnt view
+still a use of extern which is very powerful

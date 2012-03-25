@@ -1,0 +1,3 @@
+a.cpp,c.c: define two data structure with same data member in c and c++ with struct and class, respectively.
+define an interface that accepts a c++ data structure and declare a c interface that accepts a c data structure.
+pass a c data structure to a c++ interface with extern "C" method.
