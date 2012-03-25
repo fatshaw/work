@@ -1,0 +1,168 @@
+通讯协议格式: 周氏字符串
+
+编码范式
+packlen(6bytes, size of the msg content, not include packlen itself)
+000000 
+content=[param](0,*)
+param=paramlen+paramcontent
+paramlen(4bytes, sizef of the param content)
+0000
+paramcontent
+0000...(0,*)
+
+WEB_GET_USER_MSG
+request:
+packlen
+00000e
+cmd len
+0001
+cmd content
+1
+uin len
+0005
+uin content
+88888 
+
+mix: 00000e00011000588888
+
+online_msg  cache
+telnet 192.168.8.42 9870
+
+//! 协议命令字
+enum WEB_CMD
+{
+	WEB_GET_USER_MSG = 1,
+	WEB_GET_SPECIED_USER_MSG = 2,
+	WEB_DEL_USER_MSG = 3,
+	WEB_DEL_SPECIED_USER_MSG = 4,
+	WEB_GET_SUM = 5,
+	WEB_GET_SPECIED_USER_SUM = 6,
+};
+
+
+1.获取与某好友的消息条数：WEB_GET_SPECIED_USER_SUM
+request:																				
+cmd(uint8)+owner(uint32_t)+friend_id(uint32_t)+from_time(uint32_t)+to_time(uint32_t)
+
+response:
+result(uint8)+sum(uint32_t)
+
+get X -> X+1(INCLUDE) DAY RECORD NUM
+from_time = X DAY 00:00:00
+to_time	= X+1 DAY 23:59:59
+		
+
+
+0000280001600091300396370008566453970001000010
+
+0000320001600091300396370009179478644000a124565178600010
+
+
+2.获取与所有好友的消息条数：WEB_GET_SUM
+request:
+cmd(uint8)+owner(uint32_t)+from_time(uint32_t)+to_time(uint32_t)
+
+response:
+result(uint8)+sum(uint32_t)
+
+00001c0001500091300396370001000010
+
+3.获取与某好友的记录：WEB_GET_SPECIED_USER_MSG
+request:
+cmd(uint8)+owner(uint32_t)+friend_id(uint32_t)+start_index(uint32_t)+count(uint32_t)
+
+response:
+result(uint8)+count(uint32_t)+[id(uint32_t)+owner(uint32_t)+friend_id(uint32_t)
+			+send_time(uint32_t)+direction(uint8_t)+msg(string)] +...
+
+0000280001200091300396370008566453970001000019
+
+4. 获取与所有好友的记录：WEB_GET_USER_MSG
+request:
+cmd(uint8)+owner(uint32_t)+start_index(uint32_t)+count(uint32_t)
+
+response:
+result(uint8)+count(uint32_t)+[id(uint32_t)+owner(uint32_t)+friend_id(uint32_t)
+			+send_time(uint32_t)+direction(uint8_t)+msg(string)]+...
+
+00002d0001100091300396370001000099999999990001000019
+
+5.删除单条消息:WEB_DEL_SPECIED_USER_MSG
+request:
+cmd(uint8)+owner(uint32_t)+msg_id(uint32_t)
+
+response:
+result(uint8)
+
+000018000130009130039637000245
+
+
+
+6.删除多条消息:WEB_DEL_USER_MSG
+request:
+cmd(uint8)+owner(uint32_t)+friend_id(uint32_t)+from_time(uint32_t)+to_time(uint32_t)
+
+response:
+result(uint8)
+00002800014000913003963700081794786440001000010
+000032000140009130039637000917947864400010000a1245651786
+
+
+删除与所有好友的记录：friend_id 为0
+
+DELETE X -> X+1(INCLUDE) DAY RECORDS
+from_time = X DAY 00:00:00
+to_time	= X+1 DAY 23:59:59
+	
+
+
+
+
+
+test case:
+	WEB_GET_USER_MSG = 1,
+	WEB_DEL_USER_MSG = 2,
+	WEB_DEL_SPECIED_USER_MSG = 3,
+WEB_GET_USER_MSG
+request:
+packlen
+00000e
+cmd len
+0001
+cmd content
+1
+uin len
+0005
+uin content
+88888 
+
+mix: 
+00001c0001100091300396370001000019
+
+telnet 61.130.108.42 9870
+
+
+/****与连接服务器通信协议***********/
+
+typedef struct 
+{
+	uint16_t len;
+	uint16_t cmd;
+	uint16_t ver;
+	uint32_t uin;		//在KeepAlive包时仅为占位符
+}CONNECTD_HDR;
+
+
+//! 协议命令字
+enum CONNECTD_CMD
+{
+	CONNECTD_KEEP_ALIVE = 1,
+	CONNECTD_USER_MSG = 2,
+};
+
+CONNECTD_USER_MSG
+request:
+friend_id(uint32_t)>>send_time(uin32_t)>>direction(uint32_t)>>msg(string)
+response:
+N/A
+
