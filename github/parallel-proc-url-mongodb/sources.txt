@@ -1,0 +1,9 @@
+http://www.guardian.co.uk/rss
+http://rss.cnn.com/rss/cnn_topstories.rss
+http://www.alertnet.org/thenews/rss/index.xml
+http://rss.mnginteractive.com/live/sanjose/SanJose_1923271.xml
+http://rssfeeds.usatoday.com/usatoday-NewsTopStories
+http://feeds.sfgate.com/sfgate/rss/feeds/news
+http://my.abcnews.go.com/rsspublic/fp_rss20.xml
+http://feeds.cbsnews.com/CBSNewsMain
+http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml

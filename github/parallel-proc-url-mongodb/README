@@ -1,0 +1,42 @@
+tmo.c example 
+
+This simple example uses the MongoDB C Driver, pthreads and libcurl to fetch documents and insert into MongoDB. Parallel processing allows Documents to be retreived and stored simultaneously. 
+
+URLs are loaded into a global array urls[]. A pointer to the index of each URL is passed to fetch and callback functions.
+
+I have tried this sample code with up to 100 URLs, however the user should take care not to blow up their system with too many threads. 
+
+There is limited error handling in this simple example. There also appears to be a condition where certain characters, or perhaps document encoding, cause a segfault on insert. Checking into this.
+
+In a future example I will include code for parsing and manipulation of fetched data.
+
+Waitman Gobble
+San Jose, California USA
+
+Update 2012-04-30
+
+remove free w/o malloc
+add status check block to avoid compiler warnings
+add build.sh to avoid compiler warnings about comments
+add script to insert test data
+remove abuff / memcopy and use buffer from curl callback
+
+$ sh build-init.sh 
+$ ./init
+$ mongo argang
+MongoDB shell version: 2.0.4
+connecting to: argang
+> show collections;
+sources
+system.indexes
+> db.sources.find();
+{ "_id" : ObjectId("4f9f47834b12106200000000"), "url" : "http://www.guardian.co.uk/rss\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000001"), "url" : "http://rss.cnn.com/rss/cnn_topstories.rss\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000002"), "url" : "http://www.alertnet.org/thenews/rss/index.xml\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000003"), "url" : "http://rss.mnginteractive.com/live/sanjose/SanJose_1923271.xml\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000004"), "url" : "http://rssfeeds.usatoday.com/usatoday-NewsTopStories\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000005"), "url" : "http://feeds.sfgate.com/sfgate/rss/feeds/news\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000006"), "url" : "http://my.abcnews.go.com/rsspublic/fp_rss20.xml\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000007"), "url" : "http://feeds.cbsnews.com/CBSNewsMain\n" }
+{ "_id" : ObjectId("4f9f47834b12106200000008"), "url" : "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml\n" }
+> 
