@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/script/!svn/ver/3/shell/basedb_sql/2.1.0
+END
+prodb_product_info.sql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/script/!svn/ver/3/shell/basedb_sql/2.1.0/prodb_product_info.sql
+END
+prodb_feed_testing.sql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/script/!svn/ver/3/shell/basedb_sql/2.1.0/prodb_feed_testing.sql
+END
+prodb_mgmt_initdata.sql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/script/!svn/ver/3/shell/basedb_sql/2.1.0/prodb_mgmt_initdata.sql
+END
+prodb_mgmt.sql
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/script/!svn/ver/3/shell/basedb_sql/2.1.0/prodb_mgmt.sql
+END
+prodb_product_info_initdata.sql
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/script/!svn/ver/3/shell/basedb_sql/2.1.0/prodb_product_info_initdata.sql
+END

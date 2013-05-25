@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/script/!svn/ver/8/shell/basedb_sql
+END
+offline.txt
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/script/!svn/ver/3/shell/basedb_sql/offline.txt
+END
+db.txt
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/script/!svn/ver/3/shell/basedb_sql/db.txt
+END
+dump_api.sh
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/script/!svn/ver/8/shell/basedb_sql/dump_api.sh
+END
+static_api.sh
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/script/!svn/ver/8/shell/basedb_sql/static_api.sh
+END
+dump.sh
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/script/!svn/ver/3/shell/basedb_sql/dump.sh
+END

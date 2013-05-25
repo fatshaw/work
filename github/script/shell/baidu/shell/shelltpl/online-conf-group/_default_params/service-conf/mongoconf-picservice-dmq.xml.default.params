@@ -1,0 +1,16 @@
+dmqserver.ip=st01-ecom-jn5.st01.baidu.com
+dmqserver.port=62200
+dmqseacachedbproxy.username=prodbdmq
+dmqseacachedbproxy.password=prodbdmqpassword
+dmqseacachedbproxy.dbname=dmqseacachedb
+dmqseacachedbproxy.isprimary=true
+dmqinfodbproxy.username=prodbdmq
+dmqinfodbproxy.password=prodbdmqpassword
+dmqinfodbproxy.dbname=dmqinfodb
+dmqinfodbproxy.isprimary=true
+dmqadmindbproxy.username=admin
+dmqadmindbproxy.password=mopdmqindexhelper
+dmqadmindbproxy.dbname=admin
+dmqadmindbproxy.isprimary=true
+dmqconfiginfodbname=dmqconfiginfo
+dmqclientinfodbname=dmqclientinfo

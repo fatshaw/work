@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/script/!svn/ver/5/shell/copy_merchant
+END
+merchant.txt
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/script/!svn/ver/5/shell/copy_merchant/merchant.txt
+END
+replace_merchant.sh
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/script/!svn/ver/5/shell/copy_merchant/replace_merchant.sh
+END
