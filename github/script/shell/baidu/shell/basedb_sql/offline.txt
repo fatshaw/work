@@ -1,6 +1,0 @@
-passwd=123456
-pic-core-port=8333
-pic-web-port=8333
-user=root
-host=yx-hm-dmtest02.vm.baidu.com
-version=2.0.3
